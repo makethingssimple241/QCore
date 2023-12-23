@@ -27,7 +27,7 @@ void* Allocator_alloc(Allocator* allocator, size_t size) {
             allocator->pool[i] = 0;
     }
 
-    void* slot = allocator->pool[++allocator->ptr];
+    void* slot = allocator->pool[allocator->ptr++];
     void* block = malloc(size);
 
     if (block == 0) return 0;
