@@ -18,4 +18,4 @@ Allocator* Allocator_init(void);
 void* Allocator_alloc(Allocator* allocator, size_t size);
 void Allocator_deinit(Allocator* allocator);
 
-#endif
+#endif /* STD_ALLOCATOR_H */
