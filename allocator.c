@@ -1,11 +1,12 @@
 #include "allocator.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
-Allocator* Allocator_init() {
+Allocator* Allocator_init(void) {
     Allocator* allocator = malloc(sizeof(Allocator));
     
-    allocator->pool = malloc(ALLOCATOR_INITIAL_SIZE);
+    allocator->pool = malloc(sizeof(uintptr_t) * ALLOCATOR_INITIAL_SIZE);
     allocator->size = ALLOCATOR_INITIAL_SIZE;
     allocator->ptr = 0;
 
@@ -16,12 +17,15 @@ Allocator* Allocator_init() {
 }
 
 void* Allocator_alloc(Allocator* allocator, size_t size) {
-    while (allocator->ptr + size >= allocator->size) {
+    while (allocator->ptr * sizeof(uintptr_t) + size >= sizeof(uintptr_t) * allocator->size) {
         size_t original_size = allocator->size;
         allocator->size *= 2;
         void** new_pool = (void**)realloc(allocator->pool, allocator->size);
         
-        if (new_pool == 0) return 0;
+        if (new_pool == NULL) {
+            fprintf(stderr, "[ ERROR ] Allocator_alloc failed to realloc allocator->pool\n");
+            return NULL;
+        }
 
         for (size_t i = original_size; i < allocator->size; i++)
             allocator->pool[i] = 0;
@@ -29,8 +33,11 @@ void* Allocator_alloc(Allocator* allocator, size_t size) {
 
     void* slot = allocator->pool[allocator->ptr++];
     void* block = malloc(size);
-
-    if (block == 0) return 0;
+    
+    if (block == NULL) {
+        fprintf(stderr, "[ ERROR ] Allocator_alloca failed to malloc(%zu)\n", size);
+        return NULL;
+    }
 
     slot = block;
     return slot;
