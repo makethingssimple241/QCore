@@ -4,4 +4,4 @@ DYLIB_CFLAGS="-dynamiclib"
 
 set -ex
 
-$CC $CFLAGS $DYLIB_CFLAGS -o libstd.dylib allocator.c resources.c
+$CC $CFLAGS $DYLIB_CFLAGS -o libstd.dylib allocator.c resources.c log.c
