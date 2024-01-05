@@ -27,6 +27,7 @@ void dump_call_stack(void);
 
 uintptr_t std_ret;
 
+#ifdef STD_DUMP_CALL_STACK
 #define call(m_name, ...) call_stack_element m_name ## _; \
                           m_name ## _.name = #m_name "()"; \
                           m_name ## _.file = __FILE__; \
@@ -34,10 +35,18 @@ uintptr_t std_ret;
                           register_call(m_name ## _); \
                           std_ret = m_name(__VA_ARGS__); \
                           register_ret()
+#else
+#define call(m_name, ...) std_ret = m_name(__VA_ARGS__)
+#endif
 
+#ifdef STD_DUMP_CALL_STACK
 #define throw(m_exception, m_message) printf("\nTraceback (most recent call last):\n"); \
                                       dump_call_stack(); \
                                       printf("%s: %s\n", #m_exception, m_message); \
                                       exit(EXIT_FAILURE)
+#else
+#define throw(m_exception, m_message) printf("%s: %s\n", #m_exception, m_message); \
+                                      exit(EXIT_FAILURE)
+#endif
 
 #endif /* STD_LOG_H */
