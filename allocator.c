@@ -5,13 +5,16 @@
 
 Allocator* Allocator_init(void) {
     Allocator* allocator = malloc(sizeof(Allocator));
+
+    if (allocator == NULL) {
+        fprintf(stderr, "[ ERROR ] Allocator_alloc failed to malloc allocator\n");
+        return NULL;
+    }
     
     allocator->pool = malloc(sizeof(uintptr_t) * ALLOCATOR_INITIAL_SIZE);
     allocator->size = ALLOCATOR_INITIAL_SIZE;
     allocator->ptr = 0;
-
-    for (size_t i = 0; i < allocator->size; i++)
-        allocator->pool[i] = 0;
+    memset(allocator->pool, 0, sizeof(uintptr_t) * allocator->size);
 
     return allocator;
 }
@@ -44,9 +47,6 @@ void* Allocator_alloc(Allocator* allocator, size_t size) {
 }
 
 void Allocator_deinit(Allocator* allocator) {
-    for (size_t i = 0; i < allocator->size; i++)
-        free(allocator->pool[i]);
-
     free(allocator->pool);
     free(allocator);
 }

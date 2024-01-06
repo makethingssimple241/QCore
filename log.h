@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 #include "allocator.h"
 
@@ -14,34 +15,30 @@
 typedef struct {
     const char *name, *file;
     size_t line;
-} call_stack_element;
-
-/*typedef struct {
-    call_stack_element data[STD_CALL_STACK_CAPACITY];
-    size_t sp;
-} call_stack;*/
+} Call_Stack_Element;
 
 typedef struct {
     Allocator* data;
-} call_stack;
+} Call_Stack;
 
-//call_stack global_call_stack = { .sp = 0 };
+Call_Stack* global_call_stack = NULL;
+FILE* log_file = NULL;
 
-call_stack* global_call_stack = NULL;
-
-void init(void);
-void register_call(call_stack_element function);
+void init_log(FILE* file);
+void deinit_log(void);
+void write_log(const char *fmt, ...);
+void register_call(Call_Stack_Element* function);
 void register_ret(void);
 void dump_call_stack(void);
 
 uintptr_t std_ret;
 
 #ifdef STD_DUMP_CALL_STACK
-#define call(m_name, ...) call_stack_element m_name ## _; \
+#define call(m_name, ...) Call_Stack_Element m_name ## _; \
                           m_name ## _.name = #m_name "()"; \
                           m_name ## _.file = __FILE__; \
                           m_name ## _.line = __LINE__; \
-                          register_call(m_name ## _); \
+                          register_call(&m_name ## _); \
                           std_ret = m_name(__VA_ARGS__); \
                           register_ret()
 #else
@@ -49,12 +46,14 @@ uintptr_t std_ret;
 #endif
 
 #ifdef STD_DUMP_CALL_STACK
-#define throw(m_exception, m_message) printf("\nTraceback (most recent call last):\n"); \
+#define throw(m_exception, m_message) write_log("Traceback (most recent call last):\n"); \
                                       dump_call_stack(); \
-                                      printf("%s: %s\n", #m_exception, m_message); \
+                                      write_log("%s: %s\n", #m_exception, m_message); \
+                                      deinit_log(); \
                                       exit(EXIT_FAILURE)
 #else
-#define throw(m_exception, m_message) printf("%s: %s\n", #m_exception, m_message); \
+#define throw(m_exception, m_message) write_log("%s: %s\n", #m_exception, m_message); \
+                                      deinit_log(); \
                                       exit(EXIT_FAILURE)
 #endif
 

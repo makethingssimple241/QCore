@@ -1,16 +1,31 @@
 #include "log.h"
 
-void init(void) {
+void init_log(FILE* file) {
     Allocator* allocator = Allocator_init();
+    if (allocator == NULL)
+        exit(EXIT_FAILURE);
 
-    // TODO: check if allocator == NULL
-
-    global_call_stack = malloc(sizeof(call_stack));
+    global_call_stack = malloc(sizeof(Call_Stack));
     global_call_stack->data = allocator;
+
+    log_file = file;
 }
 
-void register_call(call_stack_element function) {
-    global_call_stack->data->pool[global_call_stack->data->ptr++] = &function;
+void deinit_log(void) {
+    Allocator_deinit(global_call_stack->data);
+    free(global_call_stack);
+    fclose(log_file);
+}
+
+void write_log(const char *fmt, ...) {
+    va_list arg;
+    va_start(arg, fmt);
+    vfprintf(log_file, fmt, arg);
+    va_end(arg);
+}
+
+void register_call(Call_Stack_Element* function) {
+    global_call_stack->data->pool[global_call_stack->data->ptr++] = function;
 }
 
 void register_ret(void) {
@@ -19,7 +34,7 @@ void register_ret(void) {
 
 void dump_call_stack(void) {
     for (size_t i = global_call_stack->data->ptr; i > 0; i--) {
-        call_stack_element* element = (call_stack_element*)global_call_stack->data->pool[i - 1];
-        printf("  %s:%zu, in `%s`\n", element->file, element->line, element->name);
+        Call_Stack_Element* element = global_call_stack->data->pool[i - 1];
+        write_log("  %s:%zu, in `%s`\n", element->file, element->line, element->name);
     }
 }
