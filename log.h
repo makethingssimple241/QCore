@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "allocator.h"
+
 /// If you would like the logger to display the call stack which contains all registered calls, define `STD_DUMP_CALL_STACK`
 
 #define STD_CALL_STACK_CAPACITY 1024
@@ -14,13 +16,20 @@ typedef struct {
     size_t line;
 } call_stack_element;
 
-typedef struct {
+/*typedef struct {
     call_stack_element data[STD_CALL_STACK_CAPACITY];
     size_t sp;
+} call_stack;*/
+
+typedef struct {
+    Allocator* data;
 } call_stack;
 
-call_stack global_call_stack = { .sp = 0 };
+//call_stack global_call_stack = { .sp = 0 };
 
+call_stack* global_call_stack = NULL;
+
+void init(void);
 void register_call(call_stack_element function);
 void register_ret(void);
 void dump_call_stack(void);
