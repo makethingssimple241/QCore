@@ -30,8 +30,7 @@ void* Allocator_alloc(Allocator* allocator, size_t size) {
             return NULL;
         }
 
-        for (size_t i = original_size; i < allocator->size; i++)
-            allocator->pool[i] = 0;
+        memset(allocator->pool[original_size], 0, allocator->size / 2);
     }
 
     void* slot = allocator->pool[allocator->ptr++];
