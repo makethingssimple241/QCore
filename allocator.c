@@ -47,6 +47,9 @@ void* Allocator_alloc(Allocator* allocator, size_t size) {
 }
 
 void Allocator_deinit(Allocator* allocator) {
+    for (size_t i = 0; i < allocator->ptr; i++)
+        free(allocator->pool[i]);
+
     free(allocator->pool);
     free(allocator);
 }
