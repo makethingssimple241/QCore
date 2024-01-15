@@ -29,16 +29,10 @@ void QLog(const char *fmt, ...) {
 }
 
 void QTraceback_register(QTrace* trace) {
-    traceback->data->pool[traceback->data->ptr++] = trace;
-    //printf("Registering %s:%zu:%s\n", trace->file, trace->line, trace->name);
-    //QTrace* slot = QAllocator_alloc(traceback->data, sizeof(QTrace)); 
+    QTrace* slot = QAllocator_alloc(traceback->data, sizeof(QTrace)); 
 
-    //if (slot != NULL)
-    //    *slot = *trace;
-    
-    //traceback->data->pool[traceback->data->ptr++] = trace;
-
-    //printf("Finish registering %s:%zu:%s\n", slot->file, slot->line, slot->name);
+    if (slot != NULL)
+        *slot = *trace;
 }
 
 void QTraceback_unregister(void) {
