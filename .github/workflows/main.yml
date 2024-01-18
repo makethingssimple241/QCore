@@ -4,4 +4,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: ${{ github.workspace }}/build.sh
+      - run: |
+          chmod +x ${{ github.workspace }}/build.sh
+          ${{ github.workspace }}/build.sh
