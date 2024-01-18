@@ -1,0 +1,5 @@
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./build.sh
