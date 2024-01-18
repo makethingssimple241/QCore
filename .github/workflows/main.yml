@@ -1,5 +1,6 @@
+on: push
 jobs:
-  example-job:
+  build:
     runs-on: ubuntu-latest
     steps:
       - run: ./build.sh
