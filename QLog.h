@@ -19,8 +19,8 @@ typedef struct {
     QAllocator* data;
 } QTraceback;
 
-QTraceback* traceback = NULL;
-FILE* QLogFile = NULL;
+extern QTraceback* traceback;
+extern FILE* QLogFile;
 
 void QLog_init(FILE* file);
 void QLog_deinit(void);

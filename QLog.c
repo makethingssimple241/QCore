@@ -1,5 +1,8 @@
 #include "QLog.h"
 
+QTraceback* traceback = NULL;
+FILE* QLogFile = NULL;
+
 void QLog_init(FILE* file) {
     QAllocator* allocator = QAllocator_init();
     if (allocator == NULL)
