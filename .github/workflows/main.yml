@@ -1,0 +1,11 @@
+on: push
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v4
+      - name: Run build.sh
+        run: |
+          chmod +x $GITHUB_WORKSPACE/build.sh
+          $GITHUB_WORKSPACE/build.sh
