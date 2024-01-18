@@ -3,4 +3,4 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: $GITHUB_WORKSPACE/build.sh
+      - run: ${{ github.workspace }}/build.sh
