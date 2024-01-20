@@ -3,7 +3,7 @@
 #include <errno.h>
 
 #include "QFile.h"
-#include "QLog.h"
+#include "QException.h"
 
 bool QFile_open(const char* name, const char* mode, void(*fn)(FILE*)) {
     FILE* fd = fopen(name, mode);

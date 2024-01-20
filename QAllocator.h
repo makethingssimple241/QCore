@@ -14,6 +14,8 @@ typedef struct {
 
 QAllocator* QAllocatorCreate(void);
 void* QAllocatorAllocate(QAllocator* allocator, size_t size);
+void* QAllocatorReallocate(QAllocator* allocator, void* block, size_t size);
+void QAllocatorDeallocate(QAllocator* allocator, void* block);
 void QAllocatorDestroy(QAllocator* allocator);
 
 #endif /* QALLOCATOR_H */

@@ -43,16 +43,4 @@ uintptr_t QReturnValue;
 #define call(m_name, ...) QReturnValue = m_name(__VA_ARGS__)
 #endif
 
-#ifdef QTRACEBACK
-#define throw(m_exception, m_message) QLog("Traceback (most recent call last):\n"); \
-                                      QLog_traceback(); \
-                                      QLog("%s: %s\n", #m_exception, m_message); \
-                                      QLog_deinit(); \
-                                      exit(EXIT_FAILURE)
-#else
-#define throw(m_exception, m_message) QLog("%s: %s\n", #m_exception, m_message); \
-                                      QLog_deinit(); \
-                                      exit(EXIT_FAILURE)
-#endif
-
 #endif /* QLOG_H */
