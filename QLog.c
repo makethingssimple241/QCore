@@ -4,7 +4,7 @@ QTraceback* traceback = NULL;
 FILE* QLogFile = NULL;
 
 void QLog_init(FILE* file) {
-    QAllocator* allocator = QAllocator_init();
+    QAllocator* allocator = QAllocatorCreate();
     if (allocator == NULL)
         exit(EXIT_FAILURE);
 
@@ -16,7 +16,7 @@ void QLog_init(FILE* file) {
 
 void QLog_deinit(void) {
     if (traceback != NULL) {
-        QAllocator_deinit(traceback->data);
+        QAllocatorDestroy(traceback->data);
         free(traceback);
     }
 
@@ -32,7 +32,7 @@ void QLog(const char *fmt, ...) {
 }
 
 void QTraceback_register(QTrace* trace) {
-    QTrace* slot = QAllocator_alloc(traceback->data, sizeof(QTrace)); 
+    QTrace* slot = QAllocatorAllocate(traceback->data, sizeof(QTrace)); 
 
     if (slot != NULL)
         *slot = *trace;

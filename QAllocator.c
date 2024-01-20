@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-QAllocator* QAllocator_init(void) {
+QAllocator* QAllocatorCreate(void) {
     QAllocator* allocator = malloc(sizeof(QAllocator));
 
     if (allocator == NULL) {
@@ -20,7 +20,7 @@ QAllocator* QAllocator_init(void) {
     return allocator;
 }
 
-void* QAllocator_alloc(QAllocator* allocator, size_t size) {
+void* QAllocatorAllocate(QAllocator* allocator, size_t size) {
     while (allocator->ptr * sizeof(uintptr_t) + size >= sizeof(uintptr_t) * allocator->size) {
         size_t original_size = allocator->size;
         allocator->size *= 2;
@@ -45,7 +45,7 @@ void* QAllocator_alloc(QAllocator* allocator, size_t size) {
     return block;
 }
 
-void QAllocator_deinit(QAllocator* allocator) {
+void QAllocatorDestroy(QAllocator* allocator) {
     for (size_t i = 0; i < allocator->size; i++) {
         void* ip = allocator->pool[i];
         if (ip != NULL)
