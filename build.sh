@@ -4,4 +4,4 @@ DYLIB_CFLAGS="-dynamiclib"
 
 set -ex
 
-$CC $CFLAGS $DYLIB_CFLAGS -o libstd.dylib QAllocator.c QFile.c QLog.c
+$CC $CFLAGS $DYLIB_CFLAGS -o libQCore.dylib QAllocator.c QFile.c QLog.c
