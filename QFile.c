@@ -5,7 +5,7 @@
 #include "QFile.h"
 #include "QException.h"
 
-bool QFile_open(const char* name, const char* mode, void(*fn)(FILE*)) {
+bool QFileOpen(const char* name, const char* mode, void(*fn)(FILE*)) {
     FILE* fd = fopen(name, mode);
     if (fd == 0) {
         throw(ERROR, strerror(errno));
